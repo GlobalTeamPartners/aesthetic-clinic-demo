@@ -1,7 +1,7 @@
 
 const TOTAL_FRAMES = 900;
 const LERP = 0.02;
-const CONCURRENCY = 48;
+const CONCURRENCY = 24;
 
 let frames = [];
 let loadedFrames = 0;
@@ -26,14 +26,14 @@ function updateProgress() {
     loadedFrames++;
     const percent = Math.floor((loadedFrames / TOTAL_FRAMES) * 100);
     document.getElementById('progress-text').innerText = `${percent}%`;
-    if (loadedFrames >= TOTAL_FRAMES) {
+    if (percent >= 10 && isLoading) {
+        isLoading = false;
         setTimeout(() => {
             document.getElementById('loading').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('loading').style.display = 'none';
-                isLoading = false;
             }, 1000);
-        }, 500);
+        }, 100);
     }
 }
 
