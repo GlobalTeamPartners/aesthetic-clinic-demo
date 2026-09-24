@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Aesthetic Clinic | Cinematic Experience</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="loading" class="loading-overlay">
+    <div class="loader">
+        <div class="loader-circle"></div>
+        <div class="loader-text">INITIALIZING CINEMATIC EXPERIENCE</div>
+        <div class="loader-progress" id="progress-text">0%</div>
+    </div>
+</div>
+
+<div class="video-container">
+    <canvas id="video-canvas"></canvas>
+    <div class="overlay"></div>
+</div>
+
+<nav>
+    <div class="logo">AESTHETICA</div>
+    <div class="nav-links">
+        <a href="#services">TREATMENTS</a>
+        <a href="#doctors">OUR EXPERTS</a>
+        <a href="#clinic">THE CLINIC</a>
+        <a href="#booking" class="btn-book">BOOK CONSULTATION</a>
+    </div>
+</nav>
+
+<div class="scroll-container">
+    
+    <section class="content-section" id="hero">
+        <div class="content-block">
+            <h1>Art & Science of Beauty</h1>
+            <p>Advanced aesthetic medicine in the heart of Belgrade. Discretion, luxury, and world-class results.</p>
+            <div class="scroll-indicator">
+                <div class="mouse"><div class="wheel"></div></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section" id="services">
+        <div class="content-block side-block right">
+            <h2>Signature Treatments</h2>
+            <div class="card">
+                <h3>Non-Surgical Facelift</h3>
+                <p>Advanced dermal fillers and collagen stimulators for natural rejuvenation without downtime.</p>
+            </div>
+            <div class="card">
+                <h3>Laser Skin Resurfacing</h3>
+                <p>Pico-second laser technology to erase pigmentation, scars, and fine lines.</p>
+            </div>
+            <div class="card">
+                <h3>Body Contouring</h3>
+                <p>Non-invasive fat reduction and muscle toning using cutting-edge EMS technology.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section" id="doctors">
+        <div class="content-block side-block left">
+            <h2>World-Class Experts</h2>
+            <div class="card">
+                <p>Our medical team consists of internationally trained plastic surgeons and dermatologists, bringing Beverly Hills and Swiss standards to the Balkans.</p>
+                <a href="#booking" class="btn-outline">Meet The Team</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section" id="clinic">
+        <div class="content-block">
+            <h2>The Private Clinic</h2>
+            <p>Designed for absolute privacy and comfort. Our VIP suites ensure your visit is entirely discreet.</p>
+        </div>
+    </section>
+
+    <section class="content-section" id="booking">
+        <div class="content-block">
+            <h2>Begin Your Transformation</h2>
+            <p>Schedule a private consultation with our head surgeon.</p>
+            <form class="booking-form">
+                <input type="text" placeholder="Your Name" required>
+                <input type="tel" placeholder="WhatsApp Number" required>
+                <select>
+                    <option>Facial Rejuvenation</option>
+                    <option>Body Contouring</option>
+                    <option>Dermatology</option>
+                    <option>Other / VIP Inquiry</option>
+                </select>
+                <button type="submit" class="btn-book-large">REQUEST APPOINTMENT</button>
+            </form>
+        </div>
+    </section>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
