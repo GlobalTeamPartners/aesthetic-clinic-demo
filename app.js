@@ -1,93 +1,141 @@
-
+// Aesthetic Clinic - Cinematic Scroll Engine (Fixed)
 const TOTAL_FRAMES = 900;
 const LERP = 0.02;
 const CONCURRENCY = 24;
 
-let frames = [];
-let loadedFrames = 0;
-let currentFrame = 1;
-let targetFrame = 1;
-let canvas = document.getElementById('video-canvas');
-let ctx = canvas.getContext('2d');
-let isLoading = true;
+const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent) || innerWidth < 768;
+const FRAME_DIR = isMobile ? 'frames-mobile' : 'frames-webp';
 
-const isMobile = window.innerWidth <= 768;
-const frameFolder = isMobile ? 'frames-mobile' : 'frames-webp';
+const canvas = document.getElementById('gl-canvas');
+const ctx = canvas.getContext('2d');
+let canvasDpr = 1;
 
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    if (frames[Math.floor(currentFrame)]) drawFrame(Math.floor(currentFrame));
+function resize() {
+  canvasDpr = Math.min(devicePixelRatio || 1, isMobile ? 1.5 : 2);
+  canvas.width = innerWidth * canvasDpr;
+  canvas.height = innerHeight * canvasDpr;
+  canvas.style.width = innerWidth + 'px';
+  canvas.style.height = innerHeight + 'px';
+  ctx.setTransform(canvasDpr, 0, 0, canvasDpr, 0, 0);
 }
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
+window.addEventListener('resize', resize);
+resize();
 
-function updateProgress() {
-    loadedFrames++;
-    const percent = Math.floor((loadedFrames / TOTAL_FRAMES) * 100);
-    document.getElementById('progress-text').innerText = `${percent}%`;
-    if (percent >= 10 && isLoading) {
-        isLoading = false;
-        setTimeout(() => {
-            document.getElementById('loading').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('loading').style.display = 'none';
-            }, 1000);
-        }, 100);
+const frames = new Array(TOTAL_FRAMES);
+let loadedCount = 0;
+let isReady = false;
+
+function frameName(i) {
+  return FRAME_DIR + '/frame_' + String(i + 1).padStart(6, '0') + '.webp';
+}
+
+async function loadAll() {
+  const queue = Array.from({length: TOTAL_FRAMES}, function(_, i) { return i; });
+
+  async function worker() {
+    while (queue.length) {
+      const i = queue.shift();
+      await new Promise(function(resolve) {
+        const img = new Image();
+        img.onload = img.onerror = function() {
+          frames[i] = img;
+          loadedCount++;
+
+          const pct = Math.round(loadedCount / TOTAL_FRAMES * 100);
+          const bar = document.getElementById('progress-bar');
+          if (bar) bar.style.width = pct + '%';
+          const txt = document.getElementById('progress-text');
+          if (txt) txt.innerText = pct + '%';
+
+          if (loadedCount === 1) {
+            isReady = true;
+            startAnim();
+          }
+          if (loadedCount === Math.min(30, TOTAL_FRAMES)) {
+            const loader = document.getElementById('loader');
+            if (loader) {
+              loader.style.transition = 'opacity 0.8s';
+              loader.style.opacity = '0';
+              setTimeout(function() { loader.style.display = 'none'; }, 800);
+            }
+          }
+          resolve();
+        };
+        img.src = frameName(i);
+      });
     }
+  }
+  await Promise.all(Array.from({length: CONCURRENCY}, worker));
 }
 
-async function loadFrames() {
-    let queue = [];
-    for (let i = 1; i <= TOTAL_FRAMES; i++) queue.push(i);
-    
-    async function worker() {
-        while (queue.length > 0) {
-            let i = queue.shift();
-            await new Promise((resolve) => {
-                let img = new Image();
-                img.onload = () => {
-                    frames[i] = img;
-                    updateProgress();
-                    if (i === 1) drawFrame(1);
-                    resolve();
-                };
-                img.onerror = () => {
-                    updateProgress();
-                    resolve();
-                };
-                const frameNum = String(i).padStart(6, '0');
-                img.src = `${frameFolder}/frame_${frameNum}.webp`;
-            });
-        }
+let currentFrame = 0;
+let targetFrame = 0;
+
+window.addEventListener('scroll', function() {
+  if (!isReady) return;
+  const maxScroll = document.documentElement.scrollHeight - innerHeight;
+  const progress = maxScroll > 0 ? scrollY / maxScroll : 0;
+  targetFrame = progress * (TOTAL_FRAMES - 1);
+}, { passive: true });
+
+function drawFrame(idx) {
+  const img = frames[Math.max(0, Math.min(idx, TOTAL_FRAMES - 1))];
+  if (!img || !img.complete) return;
+
+  const W = innerWidth;
+  const H = innerHeight;
+  const r = Math.max(W / img.naturalWidth, H / img.naturalHeight);
+  const iw = img.naturalWidth * r;
+  const ih = img.naturalHeight * r;
+  const x = (W - iw) / 2;
+  const y = (H - ih) / 2;
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.drawImage(img, x, y, iw, ih);
+
+  // Radial vignette
+  const vig = ctx.createRadialGradient(W/2, H/2, H*0.18, W/2, H/2, H*0.85);
+  vig.addColorStop(0, 'rgba(15,18,24,0)');
+  vig.addColorStop(1, 'rgba(15,18,24,0.80)');
+  ctx.fillStyle = vig;
+  ctx.fillRect(0, 0, W, H);
+
+  // Bottom darkening
+  const bot = ctx.createLinearGradient(0, H*0.6, 0, H);
+  bot.addColorStop(0, 'rgba(15,18,24,0)');
+  bot.addColorStop(1, 'rgba(15,18,24,0.90)');
+  ctx.fillStyle = bot;
+  ctx.fillRect(0, H*0.6, W, H*0.4);
+}
+
+function startAnim() {
+  function loop() {
+    requestAnimationFrame(loop);
+    currentFrame += (targetFrame - currentFrame) * LERP;
+    if (isReady) drawFrame(Math.round(currentFrame));
+  }
+  loop();
+}
+
+// Section reveal with IntersectionObserver
+const pages = Array.from(document.querySelectorAll('.page'));
+const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+
+const observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      const idx = pages.indexOf(entry.target);
+      pages.forEach(function(p, i) { p.classList.toggle('is-active', i === idx); });
+      navLinks.forEach(function(l, i) {
+        if (l) l.classList.toggle('active', i === idx);
+      });
     }
-    let workers = [];
-    for (let i = 0; i < CONCURRENCY; i++) workers.push(worker());
-    await Promise.all(workers);
+  });
+}, { rootMargin: '-40% 0px -40% 0px' });
+
+if (pages.length) {
+  pages[0].classList.add('is-active');
+  pages.forEach(function(p) { observer.observe(p); });
 }
 
-function drawFrame(index) {
-    if (!frames[index]) return;
-    const img = frames[index];
-    const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
-    const w = img.width * scale;
-    const h = img.height * scale;
-    const x = (canvas.width - w) / 2;
-    const y = (canvas.height - h) / 2;
-    
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, x, y, w, h);
-}
-
-function render() {
-    if (!isLoading) {
-        const scrollFraction = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-        let target = Math.max(1, Math.min(TOTAL_FRAMES, Math.floor(scrollFraction * TOTAL_FRAMES) + 1));
-        targetFrame += (target - targetFrame) * LERP;
-        const frameToDraw = Math.round(targetFrame);
-        if (frames[frameToDraw]) drawFrame(frameToDraw);
-    }
-    requestAnimationFrame(render);
-}
-loadFrames();
-render();
+loadAll();

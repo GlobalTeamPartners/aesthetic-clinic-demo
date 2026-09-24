@@ -3,101 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Aesthetic Clinic | Cinematic Experience</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Aesthetic Clinic Belgrade | Premium Medical Beauty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="loading" class="loading-overlay">
-    <div class="loader">
-        <div class="loader-circle"></div>
-        <div class="loader-text">INITIALIZING CINEMATIC EXPERIENCE</div>
-        <div class="loader-progress" id="progress-text">0%</div>
+<!-- LOADER -->
+<div id="loader">
+    <div class="loader-inner">
+        <div class="loader-ring"></div>
+        <div class="loader-brand">AESTHETICA</div>
+        <div class="loader-bar-wrap"><div id="progress-bar"></div></div>
+        <div id="progress-text">0%</div>
     </div>
 </div>
 
-<div class="video-container">
-    <canvas id="video-canvas"></canvas>
-    <div class="overlay"></div>
-</div>
+<!-- CANVAS BACKGROUND (fixed) -->
+<canvas id="gl-canvas"></canvas>
 
+<!-- NAV -->
 <nav>
-    <div class="logo">AESTHETICA</div>
-    <div class="nav-links">
-        <a href="#services">TREATMENTS</a>
-        <a href="#doctors">OUR EXPERTS</a>
-        <a href="#clinic">THE CLINIC</a>
-        <a href="#booking" class="btn-book">BOOK CONSULTATION</a>
+    <div class="logo">AESTHETICA <span>BELGRADE</span></div>
+    <div class="nav-dots">
+        <a class="nav-link active" href="#hero">&#9679;</a>
+        <a class="nav-link" href="#services">&#9679;</a>
+        <a class="nav-link" href="#doctors">&#9679;</a>
+        <a class="nav-link" href="#clinic">&#9679;</a>
+        <a class="nav-link" href="#booking">&#9679;</a>
     </div>
+    <a href="#booking" class="nav-cta">BOOK NOW</a>
 </nav>
 
-<div class="scroll-container">
-    
-    <section class="content-section" id="hero">
-        <div class="content-block">
-            <h1>Art & Science of Beauty</h1>
-            <p>Advanced aesthetic medicine in the heart of Belgrade. Discretion, luxury, and world-class results.</p>
-            <div class="scroll-indicator">
-                <div class="mouse"><div class="wheel"></div></div>
-            </div>
-        </div>
-    </section>
+<!-- PAGES -->
+<section class="page" id="hero">
+    <div class="page-content">
+        <p class="reveal-3d eyebrow">Premium Aesthetic Medicine · Belgrade</p>
+        <h1 class="reveal-3d">Art &amp; Science<br><em>of Beauty</em></h1>
+        <p class="reveal-3d sub">Advanced aesthetic medicine in the heart of Belgrade.<br>Discretion, luxury, and world-class results for discerning clients.</p>
+        <a href="#services" class="reveal-3d btn-primary">EXPLORE TREATMENTS</a>
+    </div>
+    <div class="scroll-hint reveal-3d">SCROLL</div>
+</section>
 
-    <section class="content-section" id="services">
-        <div class="content-block side-block right">
-            <h2>Signature Treatments</h2>
-            <div class="card">
+<section class="page" id="services">
+    <div class="page-content page-right">
+        <p class="eyebrow reveal-3d">Our Expertise</p>
+        <h2 class="reveal-3d">Signature<br>Treatments</h2>
+        <div class="cards">
+            <div class="card reveal-3d">
+                <div class="card-icon">&#9733;</div>
                 <h3>Non-Surgical Facelift</h3>
-                <p>Advanced dermal fillers and collagen stimulators for natural rejuvenation without downtime.</p>
+                <p>Advanced dermal fillers &amp; collagen stimulators for natural rejuvenation. Zero downtime.</p>
             </div>
-            <div class="card">
+            <div class="card reveal-3d">
+                <div class="card-icon">&#10022;</div>
                 <h3>Laser Skin Resurfacing</h3>
-                <p>Pico-second laser technology to erase pigmentation, scars, and fine lines.</p>
+                <p>Pico-second laser technology to erase pigmentation, acne scars, and fine lines.</p>
             </div>
-            <div class="card">
+            <div class="card reveal-3d">
+                <div class="card-icon">&#9670;</div>
                 <h3>Body Contouring</h3>
-                <p>Non-invasive fat reduction and muscle toning using cutting-edge EMS technology.</p>
+                <p>Non-invasive fat reduction &amp; muscle toning with cutting-edge EMS Sculpt technology.</p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="content-section" id="doctors">
-        <div class="content-block side-block left">
-            <h2>World-Class Experts</h2>
-            <div class="card">
-                <p>Our medical team consists of internationally trained plastic surgeons and dermatologists, bringing Beverly Hills and Swiss standards to the Balkans.</p>
-                <a href="#booking" class="btn-outline">Meet The Team</a>
-            </div>
-        </div>
-    </section>
+<section class="page" id="doctors">
+    <div class="page-content page-left">
+        <p class="eyebrow reveal-3d">The Experts</p>
+        <h2 class="reveal-3d">World-Class<br>Medical Team</h2>
+        <p class="reveal-3d body-text">Internationally trained plastic surgeons and dermatologists bringing Beverly Hills and Swiss clinic standards to Belgrade. Fluent in English, Russian, and Serbian.</p>
+        <a href="#booking" class="reveal-3d btn-outline">MEET THE TEAM</a>
+    </div>
+</section>
 
-    <section class="content-section" id="clinic">
-        <div class="content-block">
-            <h2>The Private Clinic</h2>
-            <p>Designed for absolute privacy and comfort. Our VIP suites ensure your visit is entirely discreet.</p>
-        </div>
-    </section>
+<section class="page" id="clinic">
+    <div class="page-content page-center">
+        <p class="eyebrow reveal-3d">The Space</p>
+        <h2 class="reveal-3d">Absolute<br><em>Privacy &amp; Comfort</em></h2>
+        <p class="reveal-3d body-text">Our private VIP suites are designed for complete discretion. Your visit is never logged publicly. Trusted by diplomatic staff, executives, and international clients.</p>
+    </div>
+</section>
 
-    <section class="content-section" id="booking">
-        <div class="content-block">
-            <h2>Begin Your Transformation</h2>
-            <p>Schedule a private consultation with our head surgeon.</p>
-            <form class="booking-form">
-                <input type="text" placeholder="Your Name" required>
-                <input type="tel" placeholder="WhatsApp Number" required>
-                <select>
-                    <option>Facial Rejuvenation</option>
-                    <option>Body Contouring</option>
-                    <option>Dermatology</option>
-                    <option>Other / VIP Inquiry</option>
-                </select>
-                <button type="submit" class="btn-book-large">REQUEST APPOINTMENT</button>
-            </form>
-        </div>
-    </section>
-
-</div>
+<section class="page" id="booking">
+    <div class="page-content page-center">
+        <p class="eyebrow reveal-3d">Begin Your Journey</p>
+        <h2 class="reveal-3d">Private<br>Consultation</h2>
+        <form class="booking-form reveal-3d" onsubmit="return false;">
+            <input type="text" placeholder="Your Name" required>
+            <input type="tel" placeholder="WhatsApp / Telegram">
+            <select>
+                <option value="">Select Treatment</option>
+                <option>Facial Rejuvenation</option>
+                <option>Laser Treatments</option>
+                <option>Body Contouring</option>
+                <option>VIP Full-Day Package</option>
+            </select>
+            <button type="submit" class="btn-gold">REQUEST APPOINTMENT</button>
+        </form>
+    </div>
+</section>
 
 <script src="app.js"></script>
 </body>
